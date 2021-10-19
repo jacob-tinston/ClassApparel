@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
 
@@ -10,9 +12,9 @@ const Header = () => {
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-xl-2 col-lg-3 col-md-12">
-                            <a href="#" className="brand-wrap">
+                            <Link to="/" className="brand-wrap">
                                 Class Apparel
-                            </a> 
+                            </Link> 
                         </div>
                         <div className="col-xl-6 col-lg-5 col-md-6">
                             <form action="#" className="search-header">
@@ -35,12 +37,12 @@ const Header = () => {
                         <div className="col-xl-4 col-lg-4 col-md-6">
                             <div className="widgets-wrap float-md-right">
                                 <div className="widget-header mr-3">
-                                    <a href="#" className="widget-view">
+                                    <Link to="/login" className="widget-view">
                                         <div className="icon-area">
                                             <i className="fa fa-user"></i>
                                         </div>
                                         <small className="text"> My profile </small>
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="widget-header mr-3">
                                     <a href="#" className="widget-view">

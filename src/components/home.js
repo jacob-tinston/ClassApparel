@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 
-const Main = () => {
+const Home = () => {
 
     return (
         <main className="container">
@@ -626,4 +626,4 @@ const Main = () => {
     )
 };
 
-export default Main;
+export default Home;
