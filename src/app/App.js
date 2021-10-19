@@ -10,6 +10,7 @@ import './App.css';
 import Header from '../components/header';
 import Home from '../components/home';
 import Login from '../components/login';
+import Register from '../components/register';
 import Newsletter from '../components/newsletter';
 import Footer from '../components/footer';
 
@@ -29,6 +30,10 @@ const App = () => {
 
             <Route path="/login">
               <Login />
+            </Route>
+
+            <Route path="/register">
+              <Register />
             </Route>
           </Switch>
 

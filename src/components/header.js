@@ -1,8 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectLoggedIn } from '../features/loggedInSlice';
 
 const Header = () => {
+    const loggedIn = useSelector(selectLoggedIn);
 
     //use redux/state to change my profile-login
 
@@ -37,12 +40,22 @@ const Header = () => {
                         <div className="col-xl-4 col-lg-4 col-md-6">
                             <div className="widgets-wrap float-md-right">
                                 <div className="widget-header mr-3">
-                                    <Link to="/login" className="widget-view">
-                                        <div className="icon-area">
-                                            <i className="fa fa-user"></i>
-                                        </div>
-                                        <small className="text"> My profile </small>
-                                    </Link>
+                                    {
+                                        loggedIn ? 
+                                        <Link to="/login" className="widget-view">
+                                            <div className="icon-area">
+                                                <i className="fa fa-user"></i>
+                                            </div>
+                                            <small className="text">Logout</small>
+                                        </Link> 
+                                        :
+                                        <Link to="/login" className="widget-view">
+                                            <div className="icon-area">
+                                                <i className="fa fa-user"></i>
+                                            </div>
+                                            <small className="text">Login</small>
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="widget-header mr-3">
                                     <a href="#" className="widget-view">

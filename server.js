@@ -7,7 +7,7 @@ app.use(express.json()); // Body Parser
 
 // Connects Database
 const db = require('./src/db/db.js');
-const pool = db.pool;
+// const pool = db.pool;
 const client = db.client;
 const connect = db.connect;
 connect();
