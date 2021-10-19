@@ -34,9 +34,12 @@ This starts the react app and you will be redirected to localhost://3003.
 ## Technologies
 * Coded in Visual Studio Code
 * HTML5 / CSS3 
-* Javascript / Node.js
-* React / Redux
-* Express.js
+* Javascript 
+    * Node.js
+    * React
+        * React Router
+        * Redux (state management)
+    * Express.js
 * PostgreSQL
 
 ## Status
