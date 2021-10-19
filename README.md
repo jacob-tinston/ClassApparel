@@ -23,7 +23,8 @@ npm install
 ```
 node server.js
 ```
-This starts the express server so the app can connect to the database.
+This starts the express server so the app can connect to the database. <br/>
+
 3. While the server is still running, run the command:
 ```
 npm start
