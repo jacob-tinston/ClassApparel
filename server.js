@@ -14,6 +14,39 @@ connect();
 
 // API Endpoints
 
+app.post('/newsletter', (req, res) => { // NEWSLETTER SIGNUP
+  const query1 = `
+  SELECT * FROM newsletter
+  WHERE email = '${req.body.email}';
+  `
+
+  const query2 = `
+    INSERT INTO newsletter (email)
+    VALUES ('${req.body.email}');
+  `
+
+  client.query(query1, (err, result) => {
+    if (err) {
+      console.log(err.stack);
+      res.status(403).send();
+    } else {
+      if (result.rows.length === 0) {
+        client.query(query2, (err, result) => {
+          if (err) {
+            console.log(err.stack);
+            res.status(403).send();
+          } else {
+            console.log('Great Success!');
+            res.status(200).send();
+          };
+        });
+      } else {
+        res.status(403).send();
+      }
+    };
+  });
+});
+
 app.post('/register', (req, res) => { // REGISTER ACCOUNT
   const query = `
     INSERT INTO profiles (forename, surname, email, password)

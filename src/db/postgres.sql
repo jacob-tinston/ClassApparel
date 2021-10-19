@@ -24,3 +24,13 @@ CREATE TABLE "public"."products" (
     "image_src" text,
     PRIMARY KEY ("id")
 );
+
+-- Sequence and defined type
+CREATE SEQUENCE IF NOT EXISTS newsletter_id_seq;
+
+-- Table Definition
+CREATE TABLE "public"."newsletter" (
+    "id" int4 NOT NULL DEFAULT nextval('newsletter_id_seq'::regclass),
+    "email" varchar(50) NOT NULL,
+    PRIMARY KEY ("id")
+);
