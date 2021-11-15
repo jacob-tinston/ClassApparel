@@ -11,8 +11,6 @@ const Newsletter = () => {
     }
 
     const handleFormSubmit = (e) => {
-        e.preventDefault();
-    
         fetch('/newsletter', {
             method: 'POST',
             headers: {
@@ -40,7 +38,8 @@ const Newsletter = () => {
                 <div className="col-lg-5 col-md-6">
             <form className="form-row" onSubmit={handleFormSubmit}>
                     <div className="col-md-8 col-7">
-                    <input id="newsletter-email" className="form-control border-0" defaultValue={email} onChange={handleInputChange} placeholder="Your Email" type="email" />
+                    <input id="newsletter-email" className="form-control border-0" defaultValue={email} onChange={handleInputChange} 
+                            placeholder="Your Email*" type="email" required />
                     </div>
                     <div className="col-md-4 col-5">
                     <button type="submit" className="btn btn-block btn-warning"> <i className="fa fa-envelope"></i> Subscribe </button>

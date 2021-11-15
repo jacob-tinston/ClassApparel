@@ -6,12 +6,9 @@ export const loggedInSlice = createSlice({
         loggedIn: false
     },
     reducers: {
-        updateLoggedin(state) {
-            if (state.loggedin) {
-                state.loggedIn = false;
-            } else {
-                state.loggedIn = true;
-            }
+        updateLoggedin(state, action) {
+            console.log(action.payload)
+            state.loggedIn = action.payload;
         }
     }
 });
@@ -19,4 +16,4 @@ export const loggedInSlice = createSlice({
 export const selectLoggedIn = state => {
     return state.loggedIn.loggedIn;
 }
-export const { updateLoggedIn } = loggedInSlice.actions;
+export const { updateLoggedin } = loggedInSlice.actions;

@@ -1,13 +1,30 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { React, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { selectLoggedIn } from '../features/loggedInSlice';
+import { updateLoggedin, selectLoggedIn } from '../features/loggedInSlice';
+import store from "../app/store";
 
 const Header = () => {
-    const loggedIn = useSelector(selectLoggedIn);
+    let loggedIn = useSelector(selectLoggedIn);
 
-    //use redux/state to change my profile-login
+    useEffect(() => {
+        fetch('/session').then(response => {
+            return response.json();
+        }).then(response => {
+            store.dispatch(updateLoggedin(response.loggedIn));
+        })
+    })
+
+    const logout = () => {
+        fetch('/logout').then(response => {
+            if (response.status === 200) {
+                window.location.href = "/";
+            } else {
+                window.alert('Could not logout.');
+            };
+        })
+    }
 
     return (
         <header className="section-header">
@@ -42,12 +59,12 @@ const Header = () => {
                                 <div className="widget-header mr-3">
                                     {
                                         loggedIn ? 
-                                        <Link to="/login" className="widget-view">
+                                        <a id="logout" onClick={logout} className="widget-view">
                                             <div className="icon-area">
                                                 <i className="fa fa-user"></i>
                                             </div>
                                             <small className="text">Logout</small>
-                                        </Link> 
+                                        </a> 
                                         :
                                         <Link to="/login" className="widget-view">
                                             <div className="icon-area">

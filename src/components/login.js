@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { React } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import store from '../app/store';
@@ -24,8 +24,6 @@ const Login = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-
         fetch(`/login?email=${email}&password=${password}`).then(response => {
             if (response.status === 200) {
                 return response.json();
@@ -69,12 +67,12 @@ const Login = () => {
                                     <input className="form-control" id="surname" placeholder="Surname" type="text" />
                                 </div> */}
                                 <div className="form-group">
-                                    <input defaultValue={email} className="form-control" id="email" placeholder="Email Address" type="email"
-                                            onChange={handleInputChange} />
+                                    <input defaultValue={email} className="form-control" id="email" placeholder="Email Address*" type="email"
+                                            onChange={handleInputChange} required />
                                 </div>
                                 <div className="form-group">
-                                    <input defaultValue={password} className="form-control" id="password" placeholder="Password" type="password"
-                                            onChange={handleInputChange} />
+                                    <input defaultValue={password} className="form-control" id="password" placeholder="Password*" type="password"
+                                            onChange={handleInputChange} required />
                                 </div>
                                 {/* <div className="form-group">
                                     <div className="input-group">

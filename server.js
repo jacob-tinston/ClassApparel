@@ -1,9 +1,26 @@
 const express = require('express');
 const app = express();
-const PORT = 3003;
+var session = require('express-session');
+const {
+  PORT = 3003,
+  SESSION_NAME = 'sid',
+  SESSION_LIFETIME = 1000*60*60*2,  // 2hrs
+  SESSION_SECRET = 'qwertyuiop'
+} = process.env;
 
+app.set('trust proxy', 1)
 app.use(express.urlencoded({extended: true}));
 app.use(express.json()); // Body Parser
+app.use(session({
+    name: SESSION_NAME,
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: SESSION_LIFETIME,
+      sameSite: true
+    }
+}))
 
 // Connects Database
 const db = require('./src/db/db.js');
@@ -13,6 +30,14 @@ const connect = db.connect;
 connect();
 
 // API Endpoints
+
+app.get('/session', (req, res) => {
+  if (req.session.views) { // if logged in
+    res.json({loggedIn: true});
+  } else {
+    res.json({loggedIn: false});
+  }
+})
 
 app.post('/newsletter', (req, res) => { // NEWSLETTER SIGNUP
   const query1 = `
@@ -36,7 +61,6 @@ app.post('/newsletter', (req, res) => { // NEWSLETTER SIGNUP
             console.log(err.stack);
             res.status(403).send();
           } else {
-            console.log('Great Success!');
             res.status(200).send();
           };
         });
@@ -58,7 +82,6 @@ app.post('/register', (req, res) => { // REGISTER ACCOUNT
       console.log(err.stack);
       res.status(403).send();
     } else {
-      console.log('Great Success!');
       res.status(200).send();
     };
   });
@@ -76,12 +99,22 @@ app.get('/login', (req, res) => { // LOGIN
       res.status(403).send();
     } else if (result.rows[0]) {
       const welcomeName = result.rows[0].forename;
-      console.log('Great Success!');
+      req.session.views  = (req.session.views || 0) + 1;
       res.status(200).json(welcomeName);
     } else {
       res.status(403).send();
     }
   })
+});
+
+app.get('/logout', (req, res) => { // LOGOUT
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(400).send();
+    } else {
+      res.status(200).send();
+    }
+  });
 });
 
 app.get('/product', (req, res) => { // SELECT PRODUCT WITH SPECIFIC ID
@@ -95,7 +128,6 @@ app.get('/product', (req, res) => { // SELECT PRODUCT WITH SPECIFIC ID
       res.status(403).send();
     } else if (result.rows[0]) {
       const data = result.rows[0];
-      console.log('Great Success!');
       res.status(200).json(data);
     } else {
       res.status(403).send();
@@ -127,7 +159,6 @@ app.delete('/delete-acc', (req, res) => { // DELETES ACCOUNT
             console.log(err.stack);
             res.status(403).send();
           } else {
-            console.log('Great Success!');
             res.status(200).send();
           };
         });
@@ -163,7 +194,6 @@ app.put('/update-acc', (req, res) => { // UPDATES ACCOUNT PASSWORD
             console.log(err.stack);
             res.status(403).send();
           } else {
-            console.log('Great Success!');
             res.status(200).send();
           };
         });

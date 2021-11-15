@@ -35,8 +35,6 @@ const Register = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-
         const data = {
             forename: forename,
             surname: surname,
@@ -53,7 +51,7 @@ const Register = () => {
         }).then(response => {
             if (response.status === 200) {
                 window.alert('Thanks for signing up!');
-                window.location.reload();
+                window.location.href = '/';
             } else if (response.status === 403) {
                 window.alert('Whoops! Email already taken!');
             };
@@ -83,20 +81,20 @@ const Register = () => {
                             <h4 className="title py-3">Hello There! Register Here</h4>
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
-                                    <input defaultValue={forename} className="form-control" id="forename" placeholder="First Name" type="text"
-                                            onChange={handleInputChange} />
+                                    <input defaultValue={forename} className="form-control" id="forename" placeholder="First Name*" type="text"
+                                            onChange={handleInputChange} required />
                                 </div>
                                 <div className="form-group">
                                     <input defaultValue={surname} className="form-control" id="surname" placeholder="Surname" type="text" 
                                             onChange={handleInputChange} />
                                 </div>
                                 <div className="form-group">
-                                    <input defaultValue={email} className="form-control" id="email" placeholder="Email Address" type="email"
-                                            onChange={handleInputChange} />
+                                    <input defaultValue={email} className="form-control" id="email" placeholder="Email Address*" type="email"
+                                            onChange={handleInputChange} required />
                                 </div>
                                 <div className="form-group">
-                                    <input defaultValue={password} className="form-control" id="password" placeholder="Password" type="password"
-                                            onChange={handleInputChange} />
+                                    <input defaultValue={password} className="form-control" id="password" placeholder="Password*" type="password"
+                                            onChange={handleInputChange} required />
                                 </div>
                                 <div className="form-group">
                                     <Link to="/login">Already have an account?</Link>
