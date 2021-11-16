@@ -24,6 +24,7 @@ const Login = () => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault();
         fetch(`/login?email=${email}&password=${password}`).then(response => {
             if (response.status === 200) {
                 return response.json();

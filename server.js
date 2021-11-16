@@ -29,9 +29,10 @@ const client = db.client;
 const connect = db.connect;
 connect();
 
+
 // Login Functionality
 
-const login = (res, req, email, password) => {
+const login = (req, res, email, password) => {
   const query = `
     SELECT * FROM PROFILES
     WHERE email = '${email}'
@@ -93,15 +94,10 @@ app.post('/newsletter', (req, res) => { // NEWSLETTER SIGNUP
   });
 });
 
-app.post('/register', (req, res, next) => { // REGISTER ACCOUNT
+app.post('/register', (req, res) => { // REGISTER ACCOUNT
   const query = `
     INSERT INTO profiles (forename, surname, email, password)
     VALUES ('${req.body.forename}', '${req.body.surname}', '${req.body.email}', '${req.body.password}');
-  `
-  const query2 = `
-    SELECT * FROM PROFILES
-    WHERE email = '${req.body.email}'
-    AND password = '${req.body.password}';
   `
 
   client.query(query, (err, result) => {
@@ -109,40 +105,13 @@ app.post('/register', (req, res, next) => { // REGISTER ACCOUNT
       console.log(err.stack);
       res.status(403).send();
     } else {
-      client.query(query2, (err, result) => {
-        if (err) {
-          console.log(err.stack);
-          res.status(403).send();
-        } else if (result.rows[0]) {
-          const welcomeName = result.rows[0].forename;
-          req.session.views  = (req.session.views || 0) + 1;
-          res.status(200).json(welcomeName);
-        } else {
-          res.status(403).send();
-        }
-      })
+      login(req, res, req.body.email, req.body.password);
     };
   });
 });
 
 app.get('/login', (req, res) => { // LOGIN
-  const query = `
-    SELECT * FROM PROFILES
-    WHERE email = '${req.query.email}'
-    AND password = '${req.query.password}';
-  `
-  client.query(query, (err, result) => {
-    if (err) {
-      console.log(err.stack);
-      res.status(403).send();
-    } else if (result.rows[0]) {
-      const welcomeName = result.rows[0].forename;
-      req.session.views  = (req.session.views || 0) + 1;
-      res.status(200).json(welcomeName);
-    } else {
-      res.status(403).send();
-    }
-  })
+  login(req, res, req.query.email, req.query.password);
 });
 
 app.get('/logout', (req, res) => { // LOGOUT
