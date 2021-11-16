@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { React, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import store from '../app/store';
@@ -14,6 +14,16 @@ const Register = () => {
     const surname = useSelector(selectRegisterSurname);
     const email = useSelector(selectRegisterEmail);
     const password = useSelector(selectRegisterPassword);
+
+    useEffect(() => {
+        fetch('/session').then(response => {
+            return response.json();
+        }).then(response => {
+            if (response.loggedIn) {
+                window.location.href = "/";
+            }
+        })
+    });
 
     const handleInputChange = (e) => {
         switch (e.target.id) {
