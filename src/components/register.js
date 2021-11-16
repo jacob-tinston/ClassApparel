@@ -35,6 +35,7 @@ const Register = () => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault();
         const data = {
             forename: forename,
             surname: surname,
@@ -50,11 +51,15 @@ const Register = () => {
             body: JSON.stringify(data)
         }).then(response => {
             if (response.status === 200) {
-                window.alert('Thanks for signing up!');
-                window.location.href = '/';
+                return response.json();
             } else if (response.status === 403) {
                 window.alert('Whoops! Email already taken!');
             };
+        }).then(response => {
+            if (response) {
+                window.alert(`Thanks for signing up ${response}!`);
+                window.location.href = '/';
+            }
         })
     }
 

@@ -29,6 +29,28 @@ const client = db.client;
 const connect = db.connect;
 connect();
 
+// Login Functionality
+
+const login = (res, req, email, password) => {
+  const query = `
+    SELECT * FROM PROFILES
+    WHERE email = '${email}'
+    AND password = '${password}';
+  `
+  client.query(query, (err, result) => {
+    if (err) {
+      console.log(err.stack);
+      res.status(403).send();
+    } else if (result.rows[0]) {
+      const welcomeName = result.rows[0].forename;
+      req.session.views  = (req.session.views || 0) + 1;
+      res.status(200).json(welcomeName);
+    } else {
+      res.status(403).send();
+    }
+  })
+};
+
 // API Endpoints
 
 app.get('/session', (req, res) => {
@@ -71,10 +93,15 @@ app.post('/newsletter', (req, res) => { // NEWSLETTER SIGNUP
   });
 });
 
-app.post('/register', (req, res) => { // REGISTER ACCOUNT
+app.post('/register', (req, res, next) => { // REGISTER ACCOUNT
   const query = `
     INSERT INTO profiles (forename, surname, email, password)
     VALUES ('${req.body.forename}', '${req.body.surname}', '${req.body.email}', '${req.body.password}');
+  `
+  const query2 = `
+    SELECT * FROM PROFILES
+    WHERE email = '${req.body.email}'
+    AND password = '${req.body.password}';
   `
 
   client.query(query, (err, result) => {
@@ -82,7 +109,18 @@ app.post('/register', (req, res) => { // REGISTER ACCOUNT
       console.log(err.stack);
       res.status(403).send();
     } else {
-      res.status(200).send();
+      client.query(query2, (err, result) => {
+        if (err) {
+          console.log(err.stack);
+          res.status(403).send();
+        } else if (result.rows[0]) {
+          const welcomeName = result.rows[0].forename;
+          req.session.views  = (req.session.views || 0) + 1;
+          res.status(200).json(welcomeName);
+        } else {
+          res.status(403).send();
+        }
+      })
     };
   });
 });
