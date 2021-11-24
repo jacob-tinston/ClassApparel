@@ -168,8 +168,8 @@ app.get('/get-cart', async (req, res) => { // SELECT CART
 app.get('/update-cart', async (req, res) => { // UPDATE CART
   const query = `
     UPDATE profiles
-    SET cart = '{10000, 10000, 10000, 10000}'
-    WHERE id = 1;
+    SET cart = '{${req.query.cart}}'
+    WHERE email = '${req.session.email}';
   `
   client.query(query, (err) => {
     if (err) {

@@ -21,9 +21,8 @@ const Header = () => {
                         return response.json();
                     };
                 }).then(response => {
-                    console.log(response.length);
-                    store.dispatch(updateCartLength(response.length));
-                    store.dispatch(updateCartItems(response));
+                    store.dispatch(updateCartLength(response ? response.length : 0));
+                    store.dispatch(updateCartItems(response ? response : []));
                 });
             }
         })

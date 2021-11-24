@@ -22,15 +22,18 @@ const Home = () => {
     }, []);
 
     const addToCart = (e) => {
-        store.dispatch(updateCartItems([...cart, `${e.target.id}`]), updateCartLength(cartLength++));
+        cart = [...cart, `${e.target.id}`]
+        store.dispatch(updateCartItems(cart), updateCartLength(cartLength++));
         store.dispatch(updateCartLength(cartLength++));
-    }
 
-    useEffect(() => {
         if (loggedIn) {
-            console.log(cartLength);
-        }
-    }, [cartLength, loggedIn]);
+            fetch(`/update-cart?cart=${cart.toString()}`).then(response => {
+                return response.json();
+            }).then(response => {
+                console.log(response)
+            })
+        };
+    }
 
     return (
         <main className="container">
