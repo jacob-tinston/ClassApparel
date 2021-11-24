@@ -7,7 +7,7 @@ export const loggedInSlice = createSlice({
     },
     reducers: {
         updateLoggedin(state, action) {
-            console.log(action.payload)
+            console.log(action.payload ? 'Logged In' : 'Not Logged In')
             state.loggedIn = action.payload;
         }
     }

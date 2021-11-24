@@ -3,18 +3,31 @@ import { React, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { updateLoggedin, selectLoggedIn } from '../features/loggedInSlice';
+import { selectCartLength, updateCartLength, updateCartItems } from '../features/cartSlice';
 import store from "../app/store";
 
 const Header = () => {
     let loggedIn = useSelector(selectLoggedIn);
+    let cartLength = useSelector(selectCartLength);
 
     useEffect(() => {
         fetch('/session').then(response => {
             return response.json();
         }).then(response => {
             store.dispatch(updateLoggedin(response.loggedIn));
+            if (loggedIn) {
+                fetch('/get-cart').then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    };
+                }).then(response => {
+                    console.log(response.length);
+                    store.dispatch(updateCartLength(response.length));
+                    store.dispatch(updateCartItems(response));
+                });
+            }
         })
-    })
+    }, [loggedIn]);
 
     const logout = () => {
         fetch('/logout').then(response => {
@@ -94,7 +107,7 @@ const Header = () => {
                                     <a href="#" className="widget-view">
                                         <div className="icon-area">
                                             <i className="fa fa-shopping-cart"></i>
-                                            <span className="notify">3</span>
+                                            <span className="notify">{cartLength}</span>
                                         </div>
                                         <small className="text"> Cart </small>
                                     </a>

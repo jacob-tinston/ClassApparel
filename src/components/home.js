@@ -1,8 +1,36 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { React, useEffect } from "react";
+import { useSelector } from 'react-redux';
+import { updateProducts, selectProducts } from '../features/productsSlice';
+import { selectCartItems, selectCartLength, updateCartLength, updateCartItems } from '../features/cartSlice';
+import { selectLoggedIn } from '../features/loggedInSlice';
+import store from "../app/store";
 
 const Home = () => {
+    let products = useSelector(selectProducts);
+    let cart = useSelector(selectCartItems);
+    let cartLength = useSelector(selectCartLength);
+    let loggedIn = useSelector(selectLoggedIn);
+
+    useEffect(() => {
+        fetch('/all-products').then(response => {
+            return response.json();
+        }).then(response => {
+            store.dispatch(updateProducts(response));
+        })
+    }, []);
+
+    const addToCart = (e) => {
+        store.dispatch(updateCartItems([...cart, `${e.target.id}`]), updateCartLength(cartLength++));
+        store.dispatch(updateCartLength(cartLength++));
+    }
+
+    useEffect(() => {
+        if (loggedIn) {
+            console.log(cartLength);
+        }
+    }, [cartLength, loggedIn]);
 
     return (
         <main className="container">
@@ -441,114 +469,23 @@ const Home = () => {
             </header>
             
             <div className="row row-sm">
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/1.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div>
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/2.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Some item name here</a>
-                            <div className="price mt-1">£280.00</div> 
-                        </figcaption>
-                    </div>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/3.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Great product name here</a>
-                            <div className="price mt-1">£56.00</div> 
-                        </figcaption>
-                    </div>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div>
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Some item name here</a>
-                            <div className="price mt-1">£280.00</div>
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Great product name here</a>
-                            <div className="price mt-1">£56.00</div>
-                        </figcaption>
-                    </div>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/9.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Just another product name</a>
-                            <div className="price mt-1">£179.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Some item name here</a>
-                            <div className="price mt-1">£280.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
-                <div className="col-xl-2 col-lg-3 col-md-4 col-6">
-                    <div className="card card-sm card-product-grid">
-                        <a href="#" className="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
-                        <figcaption className="info-wrap">
-                            <a href="#" className="title">Great product name here</a>
-                            <div className="price mt-1">£56.00</div> 
-                        </figcaption>
-                    </div>
-                </div> 
+                {
+                    products.map((product, i) => {
+                        return (
+                            <div key={i} className="col-xl-2 col-lg-3 col-md-4 col-6">
+                                <div className="card card-sm card-product-grid">
+                                    <a href="#" className="img-wrap"> <img src={product.image_src}/></a>
+                                    <figcaption className="info-wrap">
+                                        <a href="#" className="title">{product.title}</a>
+                                        <div className="price mt-1">£{product.price}</div> 
+                                        <a id={i} style={{cursor:'pointer'}} onClick={addToCart} className="add-bag">Add to cart</a>
+                                    </figcaption>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+                
             </div> 
             </section>
             

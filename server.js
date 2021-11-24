@@ -45,10 +45,29 @@ const login = (req, res, email, password) => {
     } else if (result.rows[0]) {
       const welcomeName = result.rows[0].forename;
       req.session.views  = (req.session.views || 0) + 1;
+      req.session.email = email;
       res.status(200).json(welcomeName);
     } else {
       res.status(403).send();
     }
+  })
+};
+
+const getCart = (req, res) => {
+  return new Promise((resolve) => {
+    const query = `
+      SELECT cart FROM profiles
+      WHERE email = '${req.session.email}';
+    `
+
+    client.query(query, (err, result) => {
+      if (err) {
+        console.log(err.stack);
+      } else if (result.rows[0]) {
+        const data = result.rows[0].cart;
+        resolve(data);
+      }
+    });
   })
 };
 
@@ -124,20 +143,40 @@ app.get('/logout', (req, res) => { // LOGOUT
   });
 });
 
-app.get('/product', (req, res) => { // SELECT PRODUCT WITH SPECIFIC ID
+app.get('/all-products', (req, res) => { // SELECT ALL PRODUCT
   const query = `
-    SELECT * FROM products
-    WHERE id = '${req.query.id}';
+    SELECT * FROM products;
   `
   client.query(query, (err, result) => {
     if (err) {
       console.log(err.stack);
       res.status(403).send();
     } else if (result.rows[0]) {
-      const data = result.rows[0];
+      const data = result.rows;
       res.status(200).json(data);
     } else {
       res.status(403).send();
+    }
+  })
+});
+
+app.get('/get-cart', async (req, res) => { // SELECT CART
+  const cart = await getCart(req, res);
+  res.status(200).json(cart);
+});
+
+app.get('/update-cart', async (req, res) => { // UPDATE CART
+  const query = `
+    UPDATE profiles
+    SET cart = '{10000, 10000, 10000, 10000}'
+    WHERE id = 1;
+  `
+  client.query(query, (err) => {
+    if (err) {
+      console.log(err.stack);
+      res.status(403).send();
+    } else {
+      getCart(req, res);
     }
   })
 });
