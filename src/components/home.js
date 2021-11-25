@@ -21,19 +21,26 @@ const Home = () => {
         })
     }, []);
 
-    const addToCart = (e) => {
-        cart = [...cart, `${e.target.id}`]
+    const addToCart = async (e) => {
+        cart = await fetch(`/product?id=${e.target.id}`).then(response => {
+            return response.json();
+        }).then(response => {
+            return [...cart, response[0]];
+        });
+
         store.dispatch(updateCartItems(cart), updateCartLength(cartLength++));
         store.dispatch(updateCartLength(cartLength++));
 
         if (loggedIn) {
-            fetch(`/update-cart?cart=${cart.toString()}`).then(response => {
-                return response.json();
-            }).then(response => {
-                console.log(response)
-            })
+            fetch('/update-cart', {
+                method: "PUT",
+                body: JSON.stringify(cart),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
         };
-    }
+    };
 
     return (
         <main className="container">
@@ -481,7 +488,7 @@ const Home = () => {
                                     <figcaption className="info-wrap">
                                         <a href="#" className="title">{product.title}</a>
                                         <div className="price mt-1">£{product.price}</div> 
-                                        <a id={i} style={{cursor:'pointer'}} onClick={addToCart} className="add-bag">Add to cart</a>
+                                        <a id={i + 1} style={{cursor:'pointer'}} onClick={addToCart} className="add-bag">Add to cart</a>
                                     </figcaption>
                                 </div>
                             </div>

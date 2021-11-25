@@ -1,17 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { React, useEffect } from "react";
-import { useSelector } from 'react-redux';
-import { selectCartItems, selectCartLength, updateCartLength, updateCartItems } from '../features/cartSlice';
-import store from '../app/store';
+// import { useSelector } from 'react-redux';
+// import { selectCartItems, selectCartLength } from '../features/cartSlice';
+// import store from '../app/store';
 
 const Cart = () => {
-    let cart = useSelector(selectCartItems);
-    let cartLength = useSelector(selectCartLength);
-
-    cart.forEach(element => {
-        console.log(element)
-    });
+    // let cart = useSelector(selectCartItems);
+    // let cartLength = useSelector(selectCartLength);
 
     useEffect(() => {
         fetch('/session').then(response => {

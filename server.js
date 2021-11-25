@@ -56,7 +56,7 @@ const login = (req, res, email, password) => {
 const getCart = (req, res) => {
   return new Promise((resolve) => {
     const query = `
-      SELECT cart FROM profiles
+      SELECT cart_items FROM profiles
       WHERE email = '${req.session.email}';
     `
 
@@ -64,7 +64,7 @@ const getCart = (req, res) => {
       if (err) {
         console.log(err.stack);
       } else if (result.rows[0]) {
-        const data = result.rows[0].cart;
+        const data = result.rows[0].cart_items;
         resolve(data);
       }
     });
@@ -143,6 +143,24 @@ app.get('/logout', (req, res) => { // LOGOUT
   });
 });
 
+app.get('/product', (req, res) => { // SELECT SPECIFIC PRODUCT
+  const query = `
+    SELECT * FROM products
+    WHERE id = ${req.query.id};
+  `
+  client.query(query, (err, result) => {
+    if (err) {
+      console.log(err.stack);
+      res.status(403).send();
+    } else if (result.rows[0]) {
+      const data = result.rows;
+      res.status(200).json(data);
+    } else {
+      res.status(403).send();
+    }
+  })
+});
+
 app.get('/all-products', (req, res) => { // SELECT ALL PRODUCT
   const query = `
     SELECT * FROM products;
@@ -165,10 +183,10 @@ app.get('/get-cart', async (req, res) => { // SELECT CART
   res.status(200).json(cart);
 });
 
-app.get('/update-cart', async (req, res) => { // UPDATE CART
+app.put('/update-cart', async (req, res) => { // UPDATE CART
   const query = `
     UPDATE profiles
-    SET cart = '{${req.query.cart}}'
+    SET cart_items = '${JSON.stringify(req.body)}'
     WHERE email = '${req.session.email}';
   `
   client.query(query, (err) => {
@@ -176,9 +194,9 @@ app.get('/update-cart', async (req, res) => { // UPDATE CART
       console.log(err.stack);
       res.status(403).send();
     } else {
-      getCart(req, res);
+      res.status(200).send();
     }
-  })
+  });
 });
 
 app.delete('/delete-acc', (req, res) => { // DELETES ACCOUNT
