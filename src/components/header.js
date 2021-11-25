@@ -103,13 +103,13 @@ const Header = () => {
                                     </a>
                                 </div>
                                 <div className="widget-header">
-                                    <a href="#" className="widget-view">
-                                        <div className="icon-area">
-                                            <i className="fa fa-shopping-cart"></i>
-                                            <span className="notify">{cartLength}</span>
-                                        </div>
-                                        <small className="text"> Cart </small>
-                                    </a>
+                                <Link to="/cart" className="widget-view">
+                                    <div className="icon-area">
+                                        <i className="fa fa-shopping-cart"></i>
+                                        <span className="notify">{cartLength}</span>
+                                    </div>
+                                    <small className="text"> Cart </small>
+                                </Link>
                                 </div>
                             </div> 
                         </div>
