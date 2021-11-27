@@ -3,7 +3,7 @@ import { React, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { updateLoggedin, selectLoggedIn } from '../features/loggedInSlice';
-import { selectCartLength, updateCartLength, updateCartItems } from '../features/cartSlice';
+import { selectCartLength, updateCartItems } from '../features/cartSlice';
 import store from "../app/store";
 
 const Header = () => {
@@ -21,7 +21,6 @@ const Header = () => {
                         return response.json();
                     };
                 }).then(response => {
-                    store.dispatch(updateCartLength(response ? response.length : 0));
                     store.dispatch(updateCartItems(response ? response : []));
                 });
             }

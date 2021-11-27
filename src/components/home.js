@@ -3,14 +3,13 @@
 import { React, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { updateProducts, selectProducts } from '../features/productsSlice';
-import { selectCartItems, selectCartLength, updateCartLength, updateCartItems } from '../features/cartSlice';
+import { selectCartItems, updateCartItems } from '../features/cartSlice';
 import { selectLoggedIn } from '../features/loggedInSlice';
 import store from "../app/store";
 
 const Home = () => {
     let products = useSelector(selectProducts);
     let cart = useSelector(selectCartItems);
-    let cartLength = useSelector(selectCartLength);
     let loggedIn = useSelector(selectLoggedIn);
 
     useEffect(() => {
@@ -25,11 +24,11 @@ const Home = () => {
         cart = await fetch(`/product?id=${e.target.id}`).then(response => {
             return response.json();
         }).then(response => {
+            response[0].quantity = "1";
             return [...cart, response[0]];
         });
 
-        store.dispatch(updateCartItems(cart), updateCartLength(cartLength++));
-        store.dispatch(updateCartLength(cartLength++));
+        store.dispatch(updateCartItems(cart));
 
         if (loggedIn) {
             fetch('/update-cart', {

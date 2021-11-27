@@ -35,6 +35,42 @@ code {
   cursor: pointer;
 }
 
+.cart-item {
+  display: flex;
+  margin-left: 15px;
+  padding: 15px 0;
+  width: 100% !important;
+  border-bottom: 1px solid #707070;
+
+  text-align: left;
+}
+
+.cart-item > img {
+  width: 150px;
+}
+
+.cart-item h4 {
+  margin-top: 20px;
+}
+
+.cart-item p {
+  margin: 0px;
+}
+
+.cart-item .price {
+  margin-bottom: 15px;
+}
+
+.cart-items-container > div {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.cart-item .anchor {
+  color: red !important;
+  cursor: pointer;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

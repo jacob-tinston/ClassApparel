@@ -4,14 +4,26 @@ export const cartSlice = createSlice({
     name: 'cartSlice',
     initialState: {
         cartLength: 0,
-        cartItems: []
+        cartItems: [],
+        cartTotal: 0
     },
     reducers: {
-        updateCartLength(state, action) {
-            state.cartLength = action.payload
-        },
         updateCartItems(state, action) {
-            state.cartItems = action.payload
+            state.cartItems = action.payload;
+            let length = 0;
+            state.cartItems.forEach(item => {
+                length = length + parseInt(item.quantity);
+            })
+            state.cartLength = length;
+
+            let total = 0;
+            state.cartItems.forEach(item => {
+                total = total + item.price * parseInt(item.quantity);
+            })
+            state.cartTotal = total;
+        },
+        updateItemQuantity(state, action) {
+            state.cartItems[action.payload[0]].quantity = action.payload[1];
         }
     }
 });
@@ -22,4 +34,7 @@ export const selectCartLength = state => {
 export const selectCartItems = state => {
     return state.cart.cartItems;
 }
-export const { updateCartLength, updateCartItems } = cartSlice.actions;
+export const selectCartTotal = state => {
+    return state.cart.cartTotal;
+}
+export const { updateCartItems, updateItemQuantity } = cartSlice.actions;
