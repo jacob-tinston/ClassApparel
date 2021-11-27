@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { React, useEffect } from "react";
+import { React, useEffect, useRef } from "react";
 import { useSelector } from 'react-redux';
 import { updateProducts, selectProducts } from '../features/productsSlice';
-import { selectCartItems, updateCartItems } from '../features/cartSlice';
+import { selectCartItems, updateCartItems, updateItemQuantity } from '../features/cartSlice';
 import { selectLoggedIn } from '../features/loggedInSlice';
 import store from "../app/store";
 
@@ -21,16 +21,39 @@ const Home = () => {
     }, []);
 
     const addToCart = async (e) => {
-        cart = await fetch(`/product?id=${e.target.id}`).then(response => {
-            return response.json();
-        }).then(response => {
-            response[0].quantity = "1";
-            return [...cart, response[0]];
-        });
+        let itemState = 'new';
+        let itemQuantity = 0;
+        let itemIndex;
 
-        store.dispatch(updateCartItems(cart));
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].id === parseInt(e.target.id)) {
+                itemState = 'old';
+                itemQuantity = parseInt(cart[i].quantity);
+                itemIndex = i;
+            };
+        };
 
-        if (loggedIn) {
+        if (itemState === 'new') {
+            cart = await fetch(`/product?id=${e.target.id}`).then(response => {
+                return response.json();
+            }).then(response => {
+                response[0].quantity = "1";
+                return [...cart, response[0]];
+            });
+
+            store.dispatch(updateCartItems(cart));
+        } else if (itemState === 'old') {
+            store.dispatch(updateItemQuantity([itemIndex, (itemQuantity + 1).toString()]));
+        }
+    };
+
+    const initialRender = useRef(true)
+
+    useEffect(() => {
+        if (initialRender.current) {
+            initialRender.current = false;
+        } else {
+            store.dispatch(updateCartItems(cart));
             fetch('/update-cart', {
                 method: "PUT",
                 body: JSON.stringify(cart),
@@ -38,8 +61,8 @@ const Home = () => {
                     "Content-Type": "application/json"
                 }
             });
-        };
-    };
+        }
+    }, [cart]);
 
     return (
         <main className="container">

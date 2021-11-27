@@ -10,6 +10,7 @@ export const cartSlice = createSlice({
     reducers: {
         updateCartItems(state, action) {
             state.cartItems = action.payload;
+
             let length = 0;
             state.cartItems.forEach(item => {
                 length = length + parseInt(item.quantity);
