@@ -12,6 +12,7 @@ import Home from '../components/home';
 import Login from '../components/login';
 import Register from '../components/register';
 import Cart from '../components/cart';
+import Checkout from '../components/checkout';
 import Newsletter from '../components/newsletter';
 import Footer from '../components/footer';
 
@@ -39,6 +40,10 @@ const App = () => {
 
             <Route path="/cart">
               <Cart />
+            </Route>
+
+            <Route path="/checkout">
+              <Checkout />
             </Route>
           </Switch>
 

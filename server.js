@@ -8,6 +8,8 @@ const {
   SESSION_SECRET = 'qwertyuiop'
 } = process.env;
 
+const stripe = require("stripe")('sk_test_51K1GqaBQXHqBeDicUpCbQwvwTjiFCivNwTs3ZR3Acg6q1ZV1JLgcAk9RKopJvegg7fP9aoQi6lC6EWl4Y4A5eRlw00wooKUTZL');
+
 app.set('trust proxy', 1)
 app.use(express.urlencoded({extended: true}));
 app.use(express.json()); // Body Parser
@@ -265,6 +267,25 @@ app.put('/update-acc', (req, res) => { // UPDATES ACCOUNT PASSWORD
         res.status(403).send();
       }
     };
+  });
+});
+
+/* PAYMENT */
+
+app.post("/create-payment-intent", async (req, res) => {
+  const { price } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: price * 100,
+    currency: "gbp",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
   });
 });
 

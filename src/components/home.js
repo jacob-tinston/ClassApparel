@@ -4,13 +4,11 @@ import { React, useEffect, useRef } from "react";
 import { useSelector } from 'react-redux';
 import { updateProducts, selectProducts } from '../features/productsSlice';
 import { selectCartItems, updateCartItems, updateItemQuantity } from '../features/cartSlice';
-import { selectLoggedIn } from '../features/loggedInSlice';
 import store from "../app/store";
 
 const Home = () => {
     let products = useSelector(selectProducts);
     let cart = useSelector(selectCartItems);
-    let loggedIn = useSelector(selectLoggedIn);
 
     useEffect(() => {
         fetch('/all-products').then(response => {
